@@ -69,6 +69,7 @@ button { cursor: pointer; }
 .header-inner { max-width: 1440px; margin: 0 auto; padding: 12px 32px; display: flex; align-items: center; gap: 12px 20px; flex-wrap: wrap; }
 .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; color: var(--ink); text-decoration: none; }
 .brand:hover { color: var(--ink); }
+.brand-logo { display: block; width: 72px; height: 72px; flex: 0 0 72px; object-fit: contain; }
 .page-title h1 { font-family: var(--font-display); font-size: 22px; line-height: 1.25; font-weight: 800; letter-spacing: -0.01em; }
 .page-title p { margin: 0; font-size: 13px; color: var(--ink2); }
 .header-extra { margin-left: auto; }
@@ -198,6 +199,13 @@ body.bin-dragging, body.bin-dragging .hb-bin { cursor: grabbing; user-select: no
 .story { --story-pad: clamp(20px, 5vw, 72px); }
 .story-nav { position: sticky; top: 0; z-index: 1100; display: flex; align-items: center; gap: 16px; padding: 12px var(--story-pad); background: var(--glass); backdrop-filter: blur(24px) saturate(1.4); -webkit-backdrop-filter: blur(24px) saturate(1.4); border-bottom: 1px solid var(--line); }
 .story-nav .top-nav { margin-left: auto; }
+.story-nav .brand { font-size: 24px; gap: 12px; white-space: nowrap; }
+.story-nav .brand-logo { width: 96px; height: 96px; flex-basis: 96px; }
+@media (max-width: 600px) {
+  .story-nav { flex-wrap: wrap; gap: 8px 12px; }
+  .story-nav .brand { font-size: 20px; gap: 8px; margin-right: auto; }
+  .story-nav .brand-logo { width: 72px; height: 72px; flex-basis: 72px; }
+}
 .ghost-btn { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--ink); }
 a.theme-btn { text-decoration: none; }
 a.theme-btn:hover { color: var(--accent-ink); }
@@ -631,6 +639,39 @@ button.group-card:active { transform: scale(0.98); }
 .link-btn { border: 0; background: none; padding: 0; font: inherit; font-weight: 600; color: var(--ink); cursor: pointer; text-align: left; }
 .link-btn:hover { color: var(--accent); text-decoration: underline; }
 .group-chip { display: inline-grid; place-items: center; min-width: 26px; height: 24px; padding: 0 8px; border-radius: 999px; font-size: 13px; font-weight: 700; white-space: nowrap; }
+
+/* Summary: spacious province rows with capsule statuses, without a cell grid. */
+.better-main { max-width: 1160px; }
+.matrix-toolbar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin: 20px 0 14px; }
+.matrix-search { display: flex; flex: 1 1 200px; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 700; }
+.matrix-search input { width: 100%; min-height: 38px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--field); }
+.matrix-search input::placeholder { color: var(--ink2); font-weight: 400; }
+.matrix-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.matrix-filters button { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 7px 14px; border: 1px solid transparent; border-radius: 999px; background: var(--field); font-size: 14px; }
+.matrix-filters button b { font-size: 12px; padding: 1px 7px; border-radius: 6px; background: var(--field); }
+.matrix-filters button[aria-pressed='true'] { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.matrix-count { margin: 12px 0; }
+.matrix-scroll { overflow-x: auto; isolation: isolate; }
+.move-matrix { min-width: 900px; border-collapse: separate; border-spacing: 0 10px; }
+.move-matrix th, .move-matrix td { padding: 14px 10px; border: 0; }
+.move-matrix thead th { background: var(--surface); height: 60px; font-size: 16px; font-weight: 600; }
+.move-matrix thead th small { display: block; font-size: 13px; font-weight: 400; margin-top: 3px; }
+.move-matrix tr > :first-child:not(.matrix-empty) { position: sticky; left: 0; z-index: 1; min-width: 165px; }
+.move-matrix thead tr > :first-child:not(.matrix-empty) { background: var(--surface); }
+.move-matrix tbody tr, .move-matrix tbody tr:hover { background: transparent; }
+.move-matrix tbody th, .move-matrix tbody td { background: var(--surface2); }
+.move-matrix tbody th { font-size: 14px; padding-left: 18px; border-radius: 14px 0 0 14px; }
+.move-matrix tbody td:last-child { border-radius: 0 14px 14px 0; }
+.move-matrix .link-btn { min-height: 32px; }
+.move-matrix thead .matrix-selected-year { color: var(--ink); font-weight: 700; }
+.move-matrix .matrix-empty { padding: 36px 18px; color: var(--ink2); text-align: left; font-weight: 400; }
+@media (max-width: 600px) {
+  .matrix-toolbar > * { flex: 1 1 100%; }
+  .matrix-toolbar .ui-select, .matrix-toolbar .ui-select-btn { width: 100%; }
+  .matrix-filters { display: grid; grid-template-columns: 1fr 1fr; }
+  .matrix-filters button { justify-content: space-between; }
+  .move-matrix tr > :first-child:not(.matrix-empty) { min-width: 140px; }
+}
 
 /* ---------- หน้าข่าวกับข้อมูล (/news) ---------- */
 .news-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }

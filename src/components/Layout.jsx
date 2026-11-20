@@ -12,10 +12,8 @@ export function Header({ title, subtitle, children }) {
     <header className="site-header">
       <div className="header-inner">
         <Link to="/" className="brand">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-            <path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6" />
-          </svg>
-          ขยะทั่วไทย
+          <img className="brand-logo" src="/logo.png" width="72" height="72" alt="" />
+          
         </Link>
         <div className="page-title">
           <h1>{title}</h1>

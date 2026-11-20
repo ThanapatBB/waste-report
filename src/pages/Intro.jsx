@@ -132,9 +132,7 @@ export default function Intro() {
     <div className="story">
       <header className="story-nav">
         <Link to="/" className="brand">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-            <path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6" />
-          </svg>
+          <img className="brand-logo" src="/logo.png" width="72" height="72" alt="" />
           ขยะทั่วไทย
         </Link>
         <nav className="top-nav seg">

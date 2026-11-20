@@ -3,6 +3,8 @@
 เว็บสรุปผลการจัดกลุ่ม 77 จังหวัดตามการจัดการขยะมูลฝอย ปี 2562–2568 (React + Vite + JSX)
 ข้อมูลดึงจาก Supabase (ตาราง `raw_yearly`, `result_yearly`, `result_avg`, `result_trend`) แล้วคำนวณ % / ระดับ / slope ฝั่งเว็บ
 
+เว็บที่ deploy แล้ว: https://waste-report-gj8m.vercel.app/
+
 ## เริ่มใช้งาน
 
 ```bash

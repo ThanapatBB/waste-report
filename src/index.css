@@ -309,7 +309,37 @@ html:has(.story) { scroll-snap-type: y mandatory; scroll-padding-top: 63px; }
 .grid-3 { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
 .grid-4 { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
 
-.card { background: var(--surface); border-radius: 22px; box-shadow: var(--shadow); border: 1px solid var(--line); padding: 22px; min-width: 0; transition: background 0.3s; }
+/* Book-card treatment inspired by eslam-hany / Uiverse (MIT).
+   https://uiverse.io/eslam-hany/selfish-bobcat-73
+   Static card shape and shadow only; no cover or hover effect.
+
+   Copyright (c) 2026 eslam-hany (Eslam Hany)
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+   The above copyright notice and this permission notice shall be included in
+   all copies or substantial portions of the Software.
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+   THE SOFTWARE. */
+.card {
+  --card-shadow: 1px 1px 12px rgba(27, 22, 19, 0.18);
+  background: var(--surface);
+  border-radius: 10px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--line);
+  padding: 22px;
+  min-width: 0;
+  transition: background 0.3s;
+}
+body.dark .card { --card-shadow: 1px 1px 12px rgba(0, 0, 0, 0.55); }
 .card-title { font-family: var(--font-display); font-size: 18px; font-weight: 800; letter-spacing: -0.005em; margin-bottom: 16px; }
 .section-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
 .section-head h2 { font-family: var(--font-display); font-size: 22px; font-weight: 800; }
@@ -331,9 +361,8 @@ html:has(.story) { scroll-snap-type: y mandatory; scroll-padding-top: 63px; }
 .group-card .kpi-value { font-size: 30px; }
 /* การ์ดกลุ่มกดได้: เน้นกลุ่มนั้นบนแผนที่ */
 button.group-card { display: block; width: 100%; text-align: left; border: 0; font: inherit; color: inherit; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s, background 0.3s; }
-button.group-card:hover { transform: translateY(-2px); }
-button.group-card[aria-pressed='true'] { box-shadow: var(--shadow), 0 0 0 2px var(--group); background: color-mix(in oklab, var(--group) 10%, var(--surface)); }
-@media (prefers-reduced-motion: reduce) { button.group-card { transition: none; } button.group-card:hover { transform: none; } }
+button.group-card[aria-pressed='true'] { box-shadow: var(--card-shadow), 0 0 0 2px var(--group); background: color-mix(in oklab, var(--group) 10%, var(--surface)); }
+@media (prefers-reduced-motion: reduce) { button.group-card { transition: none; } }
 
 /* charts */
 .barv { display: flex; align-items: flex-end; gap: 10px; padding-top: 24px; }

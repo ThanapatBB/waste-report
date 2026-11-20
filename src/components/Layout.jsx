@@ -2,12 +2,11 @@ import { Link, NavLink, useLocation, useSearchParams } from 'react-router-dom'
 import { YEARS } from '../lib/data'
 import { SHOW_AVG, SHOW_TREND } from '../lib/features'
 import { useSelection } from '../lib/SelectionContext'
-import { useTheme } from '../lib/theme'
+import ThemeSwitch from './ThemeSwitch'
 import HangingBin from './HangingBin'
 
 export function Header({ title, subtitle, children }) {
   const { province } = useSelection()
-  const { dark, toggle } = useTheme()
   const modelsYear = useModelsYear()
   return (
     <header className="site-header">
@@ -36,10 +35,7 @@ export function Header({ title, subtitle, children }) {
             <span className="nav-disabled" aria-disabled="true" title="ผลทดสอบมีเฉพาะรายปี เลือกปี 2562–2568 ในหน้าภาพรวมหรือกลุ่มจังหวัดก่อน">ทดสอบโมเดล</span>
           )}
         </nav>
-        <button className="theme-btn" onClick={toggle} aria-label={dark ? 'เปลี่ยนเป็นโหมดสว่าง' : 'เปลี่ยนเป็นโหมดมืด'}>
-          <span className="theme-icon" aria-hidden />
-          <span>{dark ? 'โหมดสว่าง' : 'โหมดมืด'}</span>
-        </button>
+        <ThemeSwitch />
       </div>
       <HangingBin />
     </header>

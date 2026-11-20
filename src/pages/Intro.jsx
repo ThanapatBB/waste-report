@@ -4,7 +4,7 @@ import { usePageTitle } from '../lib/usePageTitle'
 import { useData } from '../lib/DataContext'
 import { YEARS } from '../lib/data'
 import { SERIES } from '../lib/colors'
-import { useTheme } from '../lib/theme'
+import ThemeSwitch from '../components/ThemeSwitch'
 import HangingBin from '../components/HangingBin'
 import { SHOW_TREND } from '../lib/features'
 
@@ -92,7 +92,6 @@ function StoryMap({ highlight }) {
 export default function Intro() {
   const { search } = useLocation()
   const data = useData()
-  const { dark, toggle } = useTheme()
   const { yearly, names } = data
   usePageTitle(null)
 
@@ -145,9 +144,7 @@ export default function Intro() {
           <NavLink to="/summary">สรุปรวม</NavLink>
           <NavLink to="/news">ข่าว</NavLink>
         </nav>
-        <button className="ghost-btn" onClick={toggle} aria-label={dark ? 'เปลี่ยนเป็นโหมดสว่าง' : 'เปลี่ยนเป็นโหมดมืด'}>
-          <span className="theme-icon" aria-hidden />
-        </button>
+        <ThemeSwitch />
         <Link to="/overview" className="theme-btn">เข้าสู่แดชบอร์ด</Link>
         <HangingBin />
       </header>

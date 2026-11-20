@@ -82,6 +82,11 @@ export default function Summary() {
     <>
       <Header title="จังหวัดไหน ดีขึ้นบ้าง?" subtitle="เทียบทีละปีกับปีก่อนหน้า ว่าการจัดการขยะดีขึ้นหรือแย่ลง" />
       <main className="page-main better-main">
+        {name && (
+          <button type="button" className="back-btn" onClick={() => pickProvince(NONE)}>
+            <span aria-hidden>‹</span> กลับตารางสรุปจังหวัด
+          </button>
+        )}
         {/* ตัวกรอง: เลือกกลุ่มก่อน แล้วค่อยเลือกจังหวัด (ไม่เลือกก็ได้) */}
         <div className="better-filter">
           <div className="filter-step">
@@ -124,6 +129,7 @@ function ProvinceView({ yearly, name }) {
           ปีล่าสุด ({latest.y}) <Verdict j={latest.j} /> {latest.j === 0 ? 'เหมือนปีก่อน' : 'จากปีก่อน'}
         </p>
         <p className="better-sub">
+          กลุ่ม {latest.prev} → {latest.g}: {LOOK[latest.j].word}{latest.j !== 0 && ` ${Math.abs(latest.prev - latest.g)} ระดับ`} · {' '}
           {r.length} ปีที่ผ่านมา: <b style={{ color: DELTA.better }}>ดีขึ้น {n(1)} ปี</b> · <b style={{ color: DELTA.worse }}>แย่ลง {n(-1)} ปี</b> · เท่าเดิม {n(0)} ปี
         </p>
         <GroupLine s={s} groups={yearly.cluster_ids} />
@@ -242,32 +248,80 @@ function OverviewView({ yearly, list, g, onPick }) {
         <p className="better-sub">{scope} · เลือกจังหวัดด้านบนหรือกดชื่อในตารางเพื่อดูทีละจังหวัด</p>
         <CountLine data={perYear} />
       </Card>
-      <Card title="ผลแต่ละปีของแต่ละจังหวัด">
-        <p className="muted small card-sub">▲ ดีขึ้น · ▼ แย่ลง · ● เท่าเดิม (เทียบปีก่อน) · กดชื่อจังหวัดเพื่อดูกราฟ</p>
-        <div className="table-scroll">
-          <table className="data-table move-matrix">
-            <thead>
-              <tr>
-                <th>จังหวัด</th>
-                {YEARS.slice(1).map((y) => <th key={y}>{y}</th>)}
-                <th>กลุ่มปี {YEARS[LAST]}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {paths.map(({ n, s }) => (
-                <tr key={n}>
-                  <td><button type="button" className="link-btn" onClick={() => onPick(n)}>{n}</button></td>
-                  {s.slice(1).map((p) => (
-                    <td key={p.y} title={`${p.y}: ${LOOK[p.j].word}`} style={{ color: LOOK[p.j].color }}>{LOOK[p.j].icon}</td>
-                  ))}
-                  <td><GroupChip g={s[LAST].g} /></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </Card>
+      <ProvinceMatrix paths={paths} onPick={onPick} />
     </>
+  )
+}
+
+function ProvinceMatrix({ paths, onPick }) {
+  const [query, setQuery] = useState('')
+  const year = YEARS[LAST]
+  const [status, setStatus] = useState('all')
+  const [sort, setSort] = useState('priority')
+  const index = YEARS.indexOf(year)
+  const searched = paths.filter(({ n }) => n.includes(query.trim()))
+  const filters = [
+    { value: 'all', label: 'ทั้งหมด' },
+    { value: '1', label: '▲ ดีขึ้น' },
+    { value: '-1', label: '▼ แย่ลง' },
+    { value: '0', label: '● เท่าเดิม' },
+  ]
+  // Prioritize deterioration, then improvement, then unchanged provinces.
+  const priority = { '-1': 0, 1: 1, 0: 2 }
+  const rows = searched.filter(({ s }) => status === 'all' || s[index].j === Number(status)).sort((a, b) => {
+    if (sort === 'name') return byThai(a.n, b.n)
+    const rank = priority[a.s[index].j] - priority[b.s[index].j]
+    const changeA = a.s[index].g - a.s[index].prev
+    const changeB = b.s[index].g - b.s[index].prev
+    return rank || Math.abs(changeB) - Math.abs(changeA) || byThai(a.n, b.n)
+  })
+  return (
+    <Card title="ผลแต่ละปีของแต่ละจังหวัด" className="province-matrix-card">
+      <p className="muted small card-sub">แต่ละช่องเทียบกับปีก่อนหน้า · ● เท่าเดิม หมายถึงอยู่กลุ่มเดิม · กดชื่อจังหวัดเพื่อดูกราฟ</p>
+      <div className="matrix-toolbar">
+        <label className="matrix-search">ค้นหาจังหวัด
+          <input type="search" placeholder="พิมพ์ชื่อจังหวัด…" value={query} onChange={(e) => setQuery(e.target.value)} />
+        </label>
+        <div className="filter-step">
+          <span>เรียงจังหวัด</span>
+          <Select label="เรียงจังหวัด" value={sort} onChange={setSort} options={[{ value: 'priority', label: 'แย่ลงก่อน → ดีขึ้น → เท่าเดิม' }, { value: 'name', label: 'ชื่อจังหวัด ก–ฮ' }]} />
+        </div>
+      </div>
+      <div className="matrix-filters" role="group" aria-label={`สถานะปี ${year} เทียบ ${year - 1}`}>
+        {filters.map((f) => (
+          <button key={f.value} type="button" aria-pressed={status === f.value} onClick={() => setStatus(f.value)}>
+            {f.label} <b>{f.value === 'all' ? searched.length : searched.filter(({ s }) => s[index].j === Number(f.value)).length}</b>
+          </button>
+        ))}
+      </div>
+      <p className="matrix-count muted small" role="status">แสดง {rows.length} จาก {paths.length} จังหวัด · กรองสถานะปี {year} เทียบ {year - 1}</p>
+      <div className="table-scroll matrix-scroll" role="region" aria-label="ตารางผลรายปี เลื่อนแนวนอนได้" tabIndex={0}>
+        <table className="data-table move-matrix">
+          <caption className="sr-only">ผลรายปีของจังหวัด แต่ละปีเทียบปีก่อนหน้า กลุ่มล่าสุดคือปี {YEARS[LAST]}</caption>
+          <thead><tr>
+            <th scope="col">จังหวัด</th>
+            {YEARS.slice(1).map((y) => <th scope="col" key={y} className={y === year ? 'matrix-selected-year' : ''}>{y}{y === year && <small>ปีที่กรอง</small>}</th>)}
+            <th scope="col">กลุ่มล่าสุด<small>ปี {YEARS[LAST]}</small></th>
+          </tr></thead>
+          <tbody>
+            {rows.map(({ n, s }) => <tr key={n}>
+              <th scope="row"><button type="button" className="link-btn" onClick={() => onPick(n)}>{n}</button></th>
+              {s.slice(1).map((p) => {
+                const detail = `${n} ปี ${p.y}: กลุ่ม ${p.prev} → ${p.g}, ${LOOK[p.j].word}${p.j ? ` ${Math.abs(p.prev - p.g)} ระดับ` : ''}`
+                return <td key={p.y} className={p.y === year ? 'matrix-selected-year' : ''}>
+                  <span title={detail} aria-label={detail}>
+                    <Verdict j={p.j} />
+                  </span>
+                </td>
+              })}
+              <td><GroupChip g={s[LAST].g} /></td>
+            </tr>)}
+            {!rows.length && <tr><td colSpan={YEARS.length + 1} className="matrix-empty">ไม่พบจังหวัดตามเงื่อนไข ลองเปลี่ยนคำค้นหรือสถานะ</td></tr>}
+          </tbody>
+        </table>
+      </div>
+      <p className="better-note">กลุ่มล่าสุด: 1 จัดการขยะดีที่สุด → 5 แย่ที่สุด · บนจอเล็กเลื่อนตารางซ้าย–ขวาเพื่อดูครบทุกปี</p>
+    </Card>
   )
 }
 

@@ -1,0 +1,62 @@
+/* From Uiverse.io by JustCode14 — https://uiverse.io/JustCode14/red-dingo-61
+ * Copyright (c) 2026 JustCode14
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+.theme-switch {
+  font-size: 17px;
+  position: relative;
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 4em;
+  height: 2.2em;
+  border-radius: 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.theme-switch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.theme-switch-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #2a2a2a;
+  transition: background-color 0.4s;
+  border-radius: 30px;
+  overflow: hidden;
+}
+.theme-switch-slider::before {
+  position: absolute;
+  content: '';
+  height: 1.2em;
+  width: 1.2em;
+  border-radius: 20px;
+  left: 0.5em;
+  bottom: 0.5em;
+  transition: transform 0.4s cubic-bezier(0.81, -0.04, 0.38, 1.5), box-shadow 0.4s;
+  box-shadow: inset 8px -4px 0 0 #fff;
+}
+.theme-switch input:checked + .theme-switch-slider { background-color: #00a6ff; }
+.theme-switch input:checked + .theme-switch-slider::before { transform: translateX(1.8em); box-shadow: inset 15px -4px 0 15px #ffcf48; }
+.theme-switch input:focus-visible + .theme-switch-slider { outline: 3px solid var(--focus); outline-offset: 3px; }
+.theme-switch-star { background-color: #fff; border-radius: 50%; position: absolute; width: 5px; height: 5px; transition: opacity 0.4s; }
+.theme-switch .star-1 { left: 2.5em; top: 0.5em; }
+.theme-switch .star-2 { left: 2.2em; top: 1.2em; }
+.theme-switch .star-3 { left: 3em; top: 0.9em; }
+.theme-switch input:checked + .theme-switch-slider .theme-switch-star { opacity: 0; }
+.theme-switch-cloud { width: 3.5em; position: absolute; bottom: -1.4em; left: -1.1em; opacity: 0; transition: opacity 0.4s; }
+.theme-switch input:checked + .theme-switch-slider .theme-switch-cloud { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .theme-switch *, .theme-switch *::before { transition: none; }
+}
